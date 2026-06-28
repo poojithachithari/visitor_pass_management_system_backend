@@ -32,7 +32,7 @@ const getPassbyVisitorId = async (req,res)=>{
 const createPass = async(req,res)=>{
     try{
         const pass = await Pass.create(req.body)
-        const qrCode = await QRCode.toDataURL(pass._id.toString())
+        const qrCode = await QRCode.toDataURL(pass._id.toString(), { width: 400, margin: 2 })
         await Pass.findByIdAndUpdate(pass._id,{qrcode:qrCode})
         const updatedPass = await Pass.findById(pass._id)
         res.json(updatedPass)
