@@ -11,9 +11,10 @@ A RESTful API built with Node.js and Express that powers the Visitor Pass Manage
 - **Database**: MongoDB (via Mongoose)
 - **Authentication**: JSON Web Tokens (JWT) + bcrypt
 - **QR Code Generation**: qrcode
-- **Email Notifications**: Nodemailer (Gmail)
+- **Email Notifications**: Resend
 - **Environment Variables**: dotenv
 - **Dev Server**: nodemon
+- **Email Service**: Resend (HTTPS-based, no SMTP)
 
 ---
 
@@ -61,8 +62,7 @@ Create a `.env` file in the `backend/` directory with the following:
 PORT=5000
 MONGO_URL=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
-EMAIL_USER=your_gmail_address
-EMAIL_PASS=your_gmail_app_password
+RESEND_API_KEY=your_resend_api_key
 ```
 
 
@@ -156,7 +156,7 @@ The server runs on `http://localhost:5000` by default.
 - **JWT Authentication** — Secure token-based auth with bcrypt password hashing
 - **Role-Based Access Control** — Four roles: Admin, Security, Employee, Visitor
 - **QR Code Generation** — Pass IDs encoded as base64 PNG QR codes
-- **Email Notifications** — Automatic approval emails via Nodemailer when appointments are approved
+- **Email Notifications** — Automatic approval emails via Resend when appointments are approved
 - **Populated Queries** — Appointments return visitor names and host usernames via Mongoose populate
 - **Request Body Limit** — Set to 10mb to support base64 photo uploads
 

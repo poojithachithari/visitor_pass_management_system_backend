@@ -1,18 +1,9 @@
-const nodemailer = require('nodemailer')
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    family: 4,
-    auth:{
-        user:process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-})
+const { Resend } = require('resend')
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 const sendApprovalEmail = async (toEmail, visitorName, appointmentDate, appointmentTime) => {
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
+    await resend.emails.send({
+        from: 'onboarding@resend.dev',
         to: toEmail,
         subject: 'Appointment Approved',
         html: `
@@ -21,8 +12,7 @@ const sendApprovalEmail = async (toEmail, visitorName, appointmentDate, appointm
             <p>Your appointment on <b>${appointmentDate}</b> at <b>${appointmentTime}</b> has been approved.</p>
             <p>Thank You</p>
         `
-    }
-    await transporter.sendMail(mailOptions)
+    })
 }
 
-module.exports = { transporter, sendApprovalEmail }
+module.exports = { sendApprovalEmail }
