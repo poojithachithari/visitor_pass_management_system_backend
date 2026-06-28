@@ -44,18 +44,10 @@ const updateAppointment = async(req,res)=>{
             .populate('hostId', 'userName email')
         
         if(req.body.status === 'approved'  && appointment.visitorId && appointment.hostId){
-            await sendApprovalEmail(
-                appointment.visitorId.email,
-                appointment.visitorId.name,
-                appointment.appointmentDate,
-                appointment.appointmentTime
-            )
-            await sendApprovalEmail(
-                appointment.hostId.email,
-                appointment.hostId.userName,
-                appointment.appointmentDate,
-                appointment.appointmentTime
-            )
+            sendApprovalEmail(appointment.visitorId.email, appointment.visitorId.name, appointment.appointmentDate, appointment.appointmentTime)
+                .catch(err => console.log('Email error (visitor):', err))
+            sendApprovalEmail(appointment.hostId.email, appointment.hostId.userName, appointment.appointmentDate, appointment.appointmentTime)
+                .catch(err => console.log('Email error (host):', err))
         }
         res.json(appointment)
     }catch(err){
