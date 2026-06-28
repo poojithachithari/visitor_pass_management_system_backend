@@ -45,9 +45,11 @@ const updateAppointment = async(req,res)=>{
         
         if(req.body.status === 'approved'  && appointment.visitorId && appointment.hostId){
             sendApprovalEmail(appointment.visitorId.email, appointment.visitorId.name, appointment.appointmentDate, appointment.appointmentTime)
-                .catch(err => console.log('Email error (visitor):', err))
+                .then(() => console.log('✅ Visitor email sent'))
+                .catch(err => console.log('❌ Email error (visitor):', err.message))
             sendApprovalEmail(appointment.hostId.email, appointment.hostId.userName, appointment.appointmentDate, appointment.appointmentTime)
-                .catch(err => console.log('Email error (host):', err))
+                .then(() => console.log('✅ Host email sent'))
+                .catch(err => console.log('❌ Email error (host):', err.message))
         }
         res.json(appointment)
     }catch(err){
