@@ -1,14 +1,20 @@
 const User = require('../models/userModel')
+const Visitor = require('../models/visitorModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const createUser = async (req,res)=>{
     try{
-        const {userName,email,password,role} = req.body
+        const {userName,email,password,role,phone,address,photo,purposeOfVisit} = req.body
         const hashedpassword = await bcrypt.hash(password,10)
         const user = await User.create({
             userName,email,role,password:hashedpassword
         })
+
+        if(role === 'visitor'){
+            await Visitor.create({name:userName, email, phone, address, photo, purposeOfVisit})
+        }
+
         const { password: _, ...userWithoutPassword } = user.toObject()
         const token = jwt.sign({
             id:user._id,role:user.role
@@ -16,6 +22,7 @@ const createUser = async (req,res)=>{
 
         res.json({user: userWithoutPassword,token})
     }catch(err){
+        if(err.code === 11000) return res.status(400).json({message:'Email already registered'})
         res.status(500).json({message:err.message})
     }
 }
