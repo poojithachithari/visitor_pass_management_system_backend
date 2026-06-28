@@ -43,7 +43,7 @@ const updateAppointment = async(req,res)=>{
             .populate('visitorId', 'name email')
             .populate('hostId', 'userName email')
         
-        if(req.body.status === 'approved'){
+        if(req.body.status === 'approved'  && appointment.visitorId && appointment.hostId){
             await sendApprovalEmail(
                 appointment.visitorId.email,
                 appointment.visitorId.name,
